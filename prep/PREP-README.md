@@ -41,6 +41,7 @@ not cheating, just really useful reference (I'll add materials here continuously
 + .gitignore files for limiting what is stored in github [templates](https://github.com/github/gitignore), [reference syntax](https://git-scm.com/docs/gitignore)
 + to show hidden files in recent version of mac (i.e. see .git folders and .gitignore files) use the following: cmd+shift+. *simple!*
 + [dan shiffman's 'coding train' youtube tutorials on p5.js](https://www.youtube.com/channel/UCvjgXvBlbQiydffZU7m1_aw)
++ [design workshopping methods from ideo](http://www.designkit.org/methods)
 
    You'll get used to constantly googling things and keeping documentation open as you work... just part of the process.
    
