@@ -1,7 +1,7 @@
 import p5 from 'p5';
 
 import Button from './Button.js';
-//import Emitter from './Emitter.js';
+import Emitter from './Emitter.js';
 
   var labels = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eight', 'nineth'];
 	var buttons = [];
@@ -37,15 +37,15 @@ const sketch = (p5) => {
 
 			button.updateButton();
 			button.drawButton();
-			// let emited = button.drawButton();
-	  //   //console.log(emited);
+			let emited = button.drawButton();
+	    //console.log(emited);
 
-	  //   if (emited.state){
-	  //    emited.emitter.update();
-	  //    emited.emitter.display();
-	  //  } else {
-	  //    emited.emitter.reset();
-	  //  }
+	    if (emited.state){
+	     emited.emitter.update();
+	     emited.emitter.display();
+	   } else {
+	     emited.emitter.reset();
+	   }
 
 		})
 

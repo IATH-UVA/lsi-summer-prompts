@@ -2,12 +2,16 @@ import paper from 'paper';
 import Tiffany from './tiffany-window.jpg';
 //use your own image if desired. . .
 import './style.css';
+import {pixelate} from './pixelate.js';
+import {filter, levels, thresholds} from './filter.js';
 
-var p = new paper.PaperScope();
+export const p = new paper.PaperScope();
 p.setup(myCanvas);
 
+var img=[]; // 3 images
 
-//-------------------------initial image use----------------------------
+
+//---------initial image use------------------
 
 /*
 
@@ -17,10 +21,40 @@ p.setup(myCanvas);
 
 //-----------
 
+*/
+
+var raster = new p.Raster({source: Tiffany, position: p.view.center});
+img[1]=raster;
+
+
+raster.onLoad = ()=> {
+	//raster.resizing for sampling
+
+
+	//cloning the initial image to hold all 3 in img array
+
+
+
+/*
+
 2) create a function pixelation() - to be run on an image instance - that pixelates the image by a certain amount (pixel size should be one of the arguments). see examples
 
-3) copy and adapt that function as pixelateMore() to a) work on any of the loaded instances and b) also has the option to create round or square pixels... this refactoring should have 3 arguments
+put this code into another file and import for use...
 
+*/
+
+
+
+/*
+
+3) adapt that function to work on any of the loaded instances and b) also has the option to create round or square pixels... this refactoring should have 3 arguments
+
+*/
+
+
+
+
+	/*
 //-----------
 
 4) create 3 filter functions, adapted from your pixel work that alter the color of the image - explore the color object attributes and consider your options
@@ -29,7 +63,15 @@ p.setup(myCanvas);
 	one should alter the rgb values of image
 	one should use a conditional logic to explore things like thresholds and conditional color replacement
 
-//------------ day two on images and image data ----------------
+*/
+
+
+
+}
+
+/*
+
+//------------images and image data --------------
 
 5) create analysis and decomposition functions that work with pixelation to:
 	a) sort all of the pixels in an image from darkest to lightest
@@ -42,3 +84,5 @@ p.setup(myCanvas);
 
 7) bonus - create/alter your functions so that when you hover over a pixel on the bar chart, it highlights on the original pixelated image
  double bonus - on hover, it should highlight itself and give secondary highlights to those values +/- .05 in value
+
+*/

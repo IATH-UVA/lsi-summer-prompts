@@ -1,4 +1,4 @@
-//import Emitter from './Emitter.js';
+import Emitter from './Emitter.js';
 
 var wb = 100;
 
@@ -10,7 +10,7 @@ class Button {
     this.x = x;
     this.y = y;
     this.name = name;
-    //this.emitter = new Emitter(x+wb/2, y);
+    this.emitter = new Emitter(x+wb/2, y);
     this.active = false
   };
 
