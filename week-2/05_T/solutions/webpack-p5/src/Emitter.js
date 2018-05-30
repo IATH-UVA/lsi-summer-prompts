@@ -1,4 +1,6 @@
 
+
+
 class Emitter{
   constructor(x, y){
 	this.x = x;

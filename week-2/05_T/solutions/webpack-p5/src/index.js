@@ -12,6 +12,8 @@ const sketch = (p5) => {
   // make library globally available
   window.p5 = p5;
 
+  console.log('this is the window object ', window);
+
 
   //--------------------setup-----------------
   p5.setup =()=>{
