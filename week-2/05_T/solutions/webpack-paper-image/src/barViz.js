@@ -37,7 +37,8 @@ export const gradBars = function(image, size){ //alt as pointalize
 	var bars = sortColors(colors);
 	var barPixels = stackShape(bars, width, height,x,y);
 
-	console.log(barPixels);
+	//addInteraction(barPixels);
+	addRange(barPixels);
 
 }
 
@@ -102,3 +103,68 @@ function stackShape(colorObj, width, height,x,y){
 
 */
 
+function addInteraction(barArr){ // for the exact color match
+
+	//console.log(p.project);
+	barArr.forEach(bar=>{
+			var color = bar.path.fillColor;
+
+		bar.path.onMouseEnter=function(event){
+			//var color = bar.path.fillColor;
+			var items = p.project.getItems({
+			    fillColor: color,
+			    class: p.Path
+			});
+
+			items.forEach(item=>{item.fillColor='white'});
+		};
+
+		bar.path.onMouseLeave=function(event){
+			//var color = bar.path.fillColor;
+			var items = p.project.getItems({
+			    fillColor: 'white',
+			    class: p.Path
+			});
+
+			items.forEach(item=>{item.fillColor=color});
+		};
+
+	})
+
+}
+
+function addRange(barArr){ // for the exact color match
+
+	//console.log(p.project);
+	barArr.forEach(bar=>{
+			var color = bar.path.fillColor;
+			var c2 = color.components.slice().map(item=>item+.05);
+			var color2 = new p.Color(c2);
+
+
+
+		bar.path.onMouseEnter=function(event){
+			//var color = bar.path.fillColor;
+			var items = p.project.getItems({
+			    fillColor: function(obj) {
+					        return (obj<color2 && obj>color);
+							    },
+			    class: p.Path
+			});
+
+			items.forEach(item=>{item.data = item.fillColor; item.fillColor='white'});
+		};
+
+		bar.path.onMouseLeave=function(event){
+			//var color = bar.path.fillColor;
+			var items = p.project.getItems({
+			    fillColor: 'white',
+			    class: p.Path
+			});
+
+			items.forEach(item=>{item.fillColor=item.data});
+		};
+
+	})
+
+}

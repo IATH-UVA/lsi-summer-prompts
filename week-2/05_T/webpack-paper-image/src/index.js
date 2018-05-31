@@ -2,8 +2,12 @@ import paper from 'paper';
 import Tiffany from './tiffany-window.jpg';
 //use your own image if desired. . .
 import './style.css';
+
+//files you will create
 import {pixelate} from './pixelate.js';
 import {filter, levels, thresholds} from './filter.js';
+
+
 
 export const p = new paper.PaperScope();
 p.setup(myCanvas);
