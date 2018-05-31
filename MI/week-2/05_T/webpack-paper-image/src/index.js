@@ -2,14 +2,19 @@ import paper from 'paper';
 import Tiffany from './tiffany-window.jpg';
 //use your own image if desired. . .
 import './style.css';
-import {pixelate} from './pixelate.js';
+import {pixelate, pointalize} from './pixelate.js';
 import {filter, levels, thresholds} from './filter.js';
 
 export const p = new paper.PaperScope();
 p.setup(myCanvas);
 
+var raster = new p.Raster({source: Tiffany, position: p.view.center});
 var img=[]; // 3 images
 
+img[1] = raster;
+
+
+//filter(raster);
 
 //---------initial image use------------------
 
@@ -23,19 +28,43 @@ var img=[]; // 3 images
 
 */
 
-var raster = new p.Raster({source: Tiffany, position: p.view.center});
-img[1] = raster;
 
+
+//raster.visible = false;
+
+
+
+var startHeight = p.view.size.height * 0.75;
+var startWidth = p.view.size.width * 0.2;
+
+
+//
 raster.onLoad = () => {
-    //raster.resizing for sampling
-    raster.scale(0.5);
-    raster.rotate(10);
 
-    //cloning the initial image to hold all 3 in an img array
-    for(let i =0; i<2; i++){
-      var r = new.p.Raster({source: Tiffany, position: p.view.center});
-      img.push(r);
-    }
+    raster.size = new p.Size(startWidth,startHeight);
+    raster.position.x = 125;
+
+    //pointalize(raster,6,'square');
+    //pixelate(raster, 10);
+    //filter(raster, 5);
+    levels(raster,10);
+    //--------RESIZE--------------
+    // for(let i=1; i<3; i++){
+    //
+    //   var prev = img[i];
+    //   var w = prev.width*0.75;
+    //   var h = prev.height*0.75;
+    //   var cloneImg = prev.clone();
+    //   var curr=cloneImg;
+    //
+    //   img[i+1]=curr;
+    //
+    //   curr.width = w;
+    //   curr.height = h;
+    //
+    //   curr.translate(prev.width+50, 10);
+    //
+    // }
 }
 
 /*
@@ -70,7 +99,7 @@ put this code into another file and import for use...
 
 
 
-}
+
 
 /*
 

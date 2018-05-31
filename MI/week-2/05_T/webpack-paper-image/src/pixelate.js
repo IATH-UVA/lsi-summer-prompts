@@ -1,10 +1,10 @@
 import {p} from './index.js';
+import Tiffany from './tiffany-window.jpg';
 
 /* tasks 2 and 3 */
 
-
 //only used locally, as demonstration
-export const curSize= function(image){
+export const curSize = function(image){
 
 	image.visible=false;
 
@@ -24,12 +24,23 @@ put this code into another file and import for use...
 
 */
 
-//---------quick pixelate function------------
+//---------quick pixelate function--------
 export const pixelate = function(image,size){
-	//return given image at give pixel size
-	return image.size = new Size(size, size);
-}
 
+	//use variables from given method of curSize
+	var{x, y, width, height} = curSize(image);
+
+		//begin at image x bound ; iterate untill height of image+bound of image; pointalize only every pixel necessary
+		for(var i = x; i < height+x; i+=size){
+			//begin at image y bound ; iterate untill width of image+bound of image; pointalize only every pixel necessary
+			for(var j = y; j < width+y; j+=size){
+				//get color of pixel
+				var color = image.getPixel(i,j);
+				var path = new p.Path.Rectangle(i,j,size,size);
+				path.fillColor = color;
+			}
+		}
+}
 
 /*
 
@@ -41,44 +52,24 @@ export const pixelate = function(image,size){
 
 export const pointalize = function(image,size,type){ //alt as pointalize
 
-	//create a new raster item from the given image
-	var raster = new Raster(image);
+	//use variables from given method of curSize
+	var{x, y, width, height} = curSize(image);
 
-	//hide the Raster
-	raster.visible = false;
 
-	//the size of our grid cells:
-	var gridSize = 12;
 
-	var spacing = 1.2;
-
-	raster.on('load', function() {
-		raster.size = new Size(size, size);
-
-		for(var y = 0; y < raster.height; y++){
-			for(var x = 0; x < raster.width; x++){
+		//begin at image x bound ; iterate untill height of image+bound of image; pointalize only every pixel necessary
+		for(var i = x; i < height+x; i+=size){
+			//begin at image y bound ; iterate untill width of image+bound of image; pointalize only every pixel necessary
+			for(var j = y; j < width+y; j+=size){
 				//get color of pixel
-				var color = ras.getPixel(x,y);
+				var color = image.getPixel(i,j);
 
-				//create a circle shaped path:
-				var path = new Path.Circle({
-					center: new Point(x,y) * gridSize,
-					radius: girdSize / 2 / spacing
-				});
-
-				//set fill color of the path to the color of the pixel
-				path.fillColor = color;
+				if(type === 'round'){
+					var path = new p.Path.Circle(i,j, size/2);
+				}else{
+					var path = new p.Path.Rectangle(i,j,size,size);
+				}
+			path.fillColor = color;
 			}
 		}
-
-		//move the active layer to the center of the view, so all the created paths in it appear centered
-		project.activeLayer.position = view.center;
-	});
-
-	//move the active layer to the center of the view:
-	project.activeLayer.position = view.center;
-
-	}
-
-
 }
