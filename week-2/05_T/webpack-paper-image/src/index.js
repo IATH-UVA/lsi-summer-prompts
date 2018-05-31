@@ -3,7 +3,11 @@ import Tiffany from './tiffany-window.jpg';
 //use your own image if desired. . .
 import './style.css';
 
+<<<<<<< HEAD
+//files you will create!!!
+=======
 //files you will create
+>>>>>>> 09fa3b11588492f9ff187b9423f436b4f1c2af0c
 import {pixelate} from './pixelate.js';
 import {filter, levels, thresholds} from './filter.js';
 

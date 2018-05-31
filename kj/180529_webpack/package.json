@@ -1,0 +1,21 @@
+{
+  "name": "180529_webpack",
+  "version": "1.0.0",
+  "description": "sample setup for modular development on front end - yay!",
+  "private": "true",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+
+  "author": "kj",
+  "license": "ISC",
+  "devDependencies": {
+    "webpack": "^4.10.1",
+    "webpack-cli": "^2.1.4"
+  },
+  "dependencies": {
+    "p5": "^0.6.1"
+  }
+}
