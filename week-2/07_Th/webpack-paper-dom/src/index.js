@@ -111,30 +111,34 @@ window.onload=()=>{
 
 function setUpCanvas(){
 
-	/*programmatically create a canvas element, with the id 'myCanvas', a height 70% of the screen, 100% of the surrounding div width and append it to the div with class col-10'
+	//programmatically create a canvas element, with the id 'myCanvas', a height 70% of the screen,
+	//
+	//100% of the surrounding div width and append it to the div with class col-10'
+	//
+	// add a title to the top row
+	//
+	// add some placeholder text to the footer
+	//
+	// set up your paper scoped canvas
 
-	add a title to the top row
-
-	add some placeholder text to the footer
-
-	set up your paper scoped canvas
-	*/
-	//create canvas and style it
-
-
+	//create canvas and style it(header text, placeholders at bottom)
+	var canvas1 = document.createElement('canvas');
+	canvas1.id = "myCanvas";
+	canvas1.style.height = window.screen.height * 0.7;
+	canvas1.style.width = '100%';
 
 	//select column-10 and append canvas
-
-
-
+	var divWidth = document.getElementsByClassName('col-10')[0];
+	//must make sure the innerHTML is empty/clear beforehand
+	divWidth.innerHTML = "";
+	divWidth.append(canvas1);
 
 	//select and add text in the header and footer by selecting rows
+	var rows = document.getElementsByClassName('row');
+	rows[0].innerHTML = "Header Title";
+	rows[2].children[0].innerHTML = "Footer Title";
 
-
-
-	//p.setup(myCanvas);
-
-
+	p.setup(myCanvas);
 
 }
 

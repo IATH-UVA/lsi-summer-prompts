@@ -132,7 +132,7 @@ function setUpCanvas(){
 	divWidth.append(canvas1);
 
 	//select and add text in the header and footer by selecting rows
-	var rows = document.getElementsByClassName('rows');
+	var rows = document.getElementsByClassName('row');
 	rows[0].innerHTML = "Header Title";
 	rows[2].children[0].innerHTML = "Footer Title";
 
