@@ -42,6 +42,10 @@ not cheating, just really useful reference (I'll add materials here continuously
 + to show hidden files in recent version of mac (i.e. see .git folders and .gitignore files) use the following: cmd+shift+. *simple!*
 + [dan shiffman's 'coding train' youtube tutorials on p5.js](https://www.youtube.com/channel/UCvjgXvBlbQiydffZU7m1_aw)
 + [design workshopping methods from ideo](http://www.designkit.org/methods)
++ [dom definition](https://en.wikipedia.org/wiki/Document_Object_Model)
++ [webpack documentation for reference](https://webpack.js.org/guides/getting-started/)
++ [more on html's canvas element](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)
++ [more on html's svg element](https://developer.mozilla.org/en-US/docs/Web/SVG)
 
    You'll get used to constantly googling things and keeping documentation open as you work... just part of the process.
    

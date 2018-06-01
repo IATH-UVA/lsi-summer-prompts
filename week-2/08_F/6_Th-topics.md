@@ -1,13 +1,13 @@
 # LSI- #
 
-### Thursday. May 31st. ###
+### Friday. June 1st. ###
 
 *general agenda* 
 ---
-(Presumes everyone will join Monticello trip on Wednesday.) 
+(API exercises deferred to Monday.) 
 
 
-*10* Review of Tuesday and general questions, also coding challenge opportunities [codewars](https://www.codewars.com/)
+*10* Review of Thursday and general questions, also coding challenge opportunities [codewars](https://www.codewars.com/)
 
 *10:30* javascript and asynchronous calls [intro to js](https://www.codecademy.com/learn/introduction-to-javascript) 
 ---

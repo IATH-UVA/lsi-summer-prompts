@@ -2,6 +2,10 @@
 	margin-top: 10px;
 }
 
+#name {
+	background-color: white;
+}
+
 canvas {
 	border: .25px solid black;
 }

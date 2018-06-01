@@ -73,7 +73,7 @@ put this code into another file and import for use...
 
 	//filter(img[0],5, 'saturation', 1);
 	//levels(img[1],5, {red:.25, green:.15, blue:-1});
-	//thresholds(img[2],5, .25);
+	//thresholds(img[2],2, .25);
 
 /*
 
