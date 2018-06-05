@@ -2,16 +2,14 @@ import {p, toolClear, toolAdd, toolSub} from './index.js';
 
 export var pixelArr=[];
 
-
-
 //---------------------height field functions--------------------
 
-export const setUpGrid = () =>{
+export const setUpGrid = () => {
 
 	//creates grid or removes grid and recreates
 	var sW = p.view.size.width, sH = p.view.size.height;
 
-	toolClear.activate();
+	//toolClear.activate();
 
 	if (pixelArr.length!==0){
 		pixelArr.forEach(item=>{
@@ -21,6 +19,7 @@ export const setUpGrid = () =>{
 		console.log('removed and recreated grid');
 	}
 
+	//grid creation...
 	for (var i = 0; i<sW ; i+=20){
 		for (var j=0; j<sH; j+=20){
 			var pixel = new p.Path.Rectangle(i,j,20,20);

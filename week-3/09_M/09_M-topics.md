@@ -24,9 +24,13 @@
 ### Lunch
 ---
    
-*2* Show multiple searches - DPLA subject searches, promises, and thumbnail display [starting prompt and existing form structure](./)  
+*2* Show multiple searches - DPLA subject searches, promises, and thumbnail display [starting prompt and existing form structure](./) 
 
-   At 5pm, we'll review what everyone has built and how they are constructing interactions between searching and the dynamic display of books found. I will be available throughout to answer questions and offering hints.
+*3:30* check in on tasks 1 through 3, given initial team walk-through of overall structure.
+
+*4:30-5:30* finish task 4 and work on bonus ideas.
+
+   At 5:30pm, we'll review what everyone has built and how they are constructing interactions between searching and the dynamic display of books found. I will be available throughout to answer questions and offering hints.
    
    
   

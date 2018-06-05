@@ -1,5 +1,4 @@
 var axios = require('axios');
-var Promise = require('bluebird');
 
 console.log('hello there, welcome to axios testing... note we can work direct from node when desired');
 
@@ -36,48 +35,47 @@ items - "t" or "true" to return the title's items
 
 */
 
-var titleId = '';
+var title = '';
 
-var titleMeta = `https://www.biodiversitylibrary.org/api2/httpquery.ashx?op=GetTitleMetadata&titleid=${titleId}&items=t&apikey=${kBH}&format=json`
+var titlemeta = `https://www.biodiversitylibrary.org/api2/httpquery.ashx?op=GetTitleMetadata&titleid=${title}&items=t&apikey=${kBH}&format=json`
 
 
-
-var calls = axios.get(subj)
+var query = axios.get(subj)
   .then(function (response) {
   	//examine the response object in general
   	//console.log(response);
 
+    //clean and extract what you want from response
+    //add a call to get one of the items in the results list using the 'oficial' variable above
   	var resultsArr = response.data.Result.map(item=>{return {official:item.SubjectText.trim()}});
   	official = resultsArr[3].official;
   	//console.log(official);
 
-  	return axios.get(fullSubject) //comment on inclusion of return before paying through full axios/bluebird structure in two ways...
-  	.then(res=>{
-  		var titleArr = res.data.Result;
-      //console.log(titleArr);
+  	return axios.get(fullSubject)
+        	.then(res=>{
+        		//console.log(res.data.Result[2]);
 
-    var titleSearches=titleArr.map(title=>{
-        titleId = title.TitleID;
-        var titleMeta = `https://www.biodiversitylibrary.org/api2/httpquery.ashx?op=GetTitleMetadata&titleid=${titleId}&items=t&apikey=${kBH}&format=json`;
-
-        return (axios.get(titleMeta));
-      });
-
-    return Promise.all(titleSearches)
-    .then(resArr=>{
-      var res=resArr.map(resArr=>resArr.data.Result.Items) // get close to thumbnails
-
-      return res;
-    })
-
-
-  	})
-
-
+        		//add a call to get the full range of metadata on that title
+            title = res.data.Result[2].TitleID;
+            //troubleshoot scoping issues
+            titlemeta = `https://www.biodiversitylibrary.org/api2/httpquery.ashx?op=GetTitleMetadata&titleid=${title}&items=t&apikey=${kBH}&format=json`
+            return axios.get(titlemeta);
+        	})
   })
   .catch(function (error) {
     console.log(error);
   });
 
 
-calls.then(res=>console.log(res)); //clean up for initial use
+query.then(res=>{
+      //console.log(res.data.Result.Items);
+
+      //create an array of thumbnails given the entry's items-
+      var thumbs = res.data.Result.Items.map(item=>item.ItemThumbUrl);
+
+      //console.log(thumbs);
+
+    })
+  .catch(function (error) {
+      console.log(error);
+    });
