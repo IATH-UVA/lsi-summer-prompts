@@ -52,4 +52,16 @@ SELECT first_name, last_name, name, year
    AND movies.year%4= 0
    ORDER BY name;
 
-
+#9) braveheart zombies!
+select name, year, last_name, first_name
+from movies, actors, roles
+where movies.name like '%zombie%'
+and roles.movie_id = movies.id
+and roles.actor_id = actors.id
+and actors.id in
+   (select actors.id
+   from movies,actors,roles
+   where movies.name = 'Braveheart'
+   and movies.year = 1925
+   and roles.movie_id=movies.id
+   and roles.actor_id = actors.id);
