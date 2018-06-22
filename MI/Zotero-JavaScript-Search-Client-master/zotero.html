@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Zotero Search</title>
+	<meta charset="utf-8" /> 
+	<script src="https://use.fontawesome.com/a989b590e9.js"></script>
+	<link href="search.css" rel="stylesheet" type="text/css">
+	<script src="cors.js"></script>
+	<script src="pagination.js"></script>
+	<script src="zotero.js"></script>
+</head>
+<body>
+	<h1> Demo Zotero Search </h1>
+	<h5><p>Enter a search term, e.g., groundwater. The landscape-studies group, with ID 2144277, will be searched. Results will be given in MLA format.</p></h5>
+	<form id="zoteroSearchForm" name="zoteroSearchForm">
+		<input class="search-input" name="q" placeholder="Enter search term" type="text"> <input type="submit" value="Search">
+	</form>
+	<div class="loading" id="loading-div">
+		<i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+		<span class="sr-only">Loading...</span>
+	</div>
+	<p>Search URL to Zotero website will be written below:</p>
+	<p id="searchUrl"></p>
+	<p>Search results will be written below:</p>
+	<div class="resultCount" id="resultCount"></div>
+	<div id="searchResults"></div>
+	<div class="pagination" id="pagination"></div>
+</body>
+</html>

@@ -43,10 +43,10 @@ window.onload=(()=>{
 
 	var calls = values.map(item=>{ // calls should thus hold the three format calls
 
-	var subj = subjectFormat(values[0].value);
+	var subj = values[0].value.split(' ').join('+');
 
 	if (item.id !== 'subject' && item.checked){
-		return grabFormat(subj, item.id);
+		return organize(subj, item.id);
 	}
 
 	}).filter(item=>item!==undefined);
@@ -57,39 +57,39 @@ window.onload=(()=>{
 			.then(results=>{
 				// remember that you are working with arrays of arrays of results
 
-	// 3) integrate the getHathiPage and get simpEntry functions to format your results array
-	// and remember to sort entries by date. . .
-	res = resAll.map(item=>{
-		if (!item.object && item.provider.name==="HathiTrust"){
-			item.object = getHathiPage(item.originalRecord);
-			return simpEntry(item);
-		} else {
-			return simpEntry(item);
-		}
-	}).sort((a,b)=>{return a.date-b.date});
-	// 4) fill out the function below that takes your formatted results and adds cards to the main window
-				addCards(results);
+				var res =results.map(i => i.data.docs);
+				var resAll=[].concat(...res);
 
+				// 3) integrate the getHathiPage and get simpEntry functions to format your results array
+				// and remember to sort entries by date. . .
+				res = resAll.map(item=>{
+					if (!item.object && item.provider.name==="HathiTrust"){
+						item.object = getHathiPage(item.originalRecord);
+						return simpEntry(item);
+					} else {
+						return simpEntry(item);
+					}
+				}).sort((a,b)=>{return a.date-b.date});
 
-	// 5) bonus - add buttons to resort existing cards order or to display additional values on the side.
+				// 4) fill out the function below that takes your formatted results and adds cards to the main window
+				
+				addCards(res);
 
+				// 5) bonus - add buttons to resort existing cards order or to display additional values on the side.
+				
+				addButtons(res);
 
 		})
 		.catch(console.log);
-
-
-
-
-
 	});
 });
 
 
 /* write as many functions down here as desired, to simplify your code and avoid repetition */
-const organize = ((subject, format) => {
+const organize = (subject, format) => {
 	var baseAddress = 'https://api.dp.la/v2/items';
 
-	var parameters{
+	var parameters = {
 		params: {
 			q: subject,
 			page_size: '50',
@@ -100,7 +100,7 @@ const organize = ((subject, format) => {
 	}
 
 	return Axios.get(baseAddress, parameters);
-});
+};
 
 
 //for instance this is written to simplify tapping the MARC entries of Hathi records to get a page thumbnail
@@ -134,6 +134,7 @@ const simpEntry = (itemObj)=>{
 		type: (itemObj.sourceResource.type) ? arrStr(itemObj.sourceResource.type) : null,
 		date: itemObj.sourceResource.date.begin,
 		source: itemObj.provider.name,
+		//city: (itemObj.sourceResource.spatial.city)? itemObj.sourceResource.spatial.city : null
 	}
 }
 
@@ -153,7 +154,27 @@ const addCards = (arr) => {
 
 		//4) add/edit the html with inserted js to create the cards here, look at the bootstrap options
 
-		var card = '';
+		var card =`
+
+		<div class="card" style="width: 17rem; margin-right: 1rem;margin-top: 1rem;">
+		    <div class = "card text-center">
+				<div class = "card-header">
+			    	<a href=${entry.link} class="card-link" target="_blank"><em><h8 class="card-title">${entry.title}</h8></em></a>
+			    </div>
+			</div>
+
+		    <img class="card-img-top align-self-center" src=" ${entry.thumb}" style="width: 10rem;">
+		    
+		    <div class="card-body">
+			      <ul class = "list-group list-group-flush">
+			      	<li class = "list-group-item">date: ${entry.date}</li>
+			      	<li class = "list-group-item">creator: ${entry.creator}</li>
+			      	<li class = "list-group-item">publisher: ${entry.publisher}</li>
+			      	<li class = "list-group-item">type: ${entry.type}</li>
+			      	<li class = "list-group-item">source: ${entry.source}</li>
+			      </ul>  
+		    </div>
+	    </div>`
 
 
 		cards.innerHTML += card ;
@@ -163,8 +184,36 @@ const addCards = (arr) => {
 
 }
 
+const addButtons = (arr) =>{
+
+	if(!document.quearySelector('#buttons')) {
+		var buttons = document.createElement('div');
+		buttons.id = "buttons";
+		buttons.style.display = 'flex';
+		buttons.style.flexWrap = 'wrap';
+		buttons.style.height = '20vh';
+		buttons.style.overflow = 'auto';
+	}
+
+	arr.forEach(entry =>{
+
+		var button = `
+
+			<div class = "card">
+				<div class = "card-body">
+					<a href = "http://www.staggeringbeauty.com/" class = "btn btn-primary">Button</a>
+				</div>
+			</div>`
+
+		buttons.innerHTML += button;
+
+	})
+
+	document.querySelector('row minor').append(buttons);
+
+}
 
 //other ideas:
 
-				//aggregate by decade then medium, decade year then author, decade then source
-				//radio buttons to that effect
+//aggregate by decade then medium, decade year then author, decade then source
+//radio buttons to that effect

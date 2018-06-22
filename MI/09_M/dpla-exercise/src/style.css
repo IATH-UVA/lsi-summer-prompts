@@ -1,0 +1,26 @@
+body {
+	overflow: hidden;
+}
+
+.container-fluid {
+	margin-top: 10px;
+	overflow: hidden;
+}
+
+canvas {
+	border: .25px solid black;
+}
+
+.main {
+	height: 80vh;
+}
+
+.minor {
+	height: 10vh;
+}
+
+.resList {
+	height: 50vh;
+	overflow-y: auto;
+}
+
