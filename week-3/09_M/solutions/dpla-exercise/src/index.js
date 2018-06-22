@@ -19,7 +19,15 @@ const kDP = '5923dd6cd08de1200d544796148a13fa' ;
 window.onload=(()=>{
 	console.log('window loaded');
 
+
+	var query = grabFormat(null, 'json');
+
+	query.then(result=>{
+		console.log(result.data);
+	})
+
 //-----------------------general selections-----------------------------
+/*
 	document.querySelector('#mainform').addEventListener('submit', (event)=>{
 		//we'll unpack this listening together
 		event.preventDefault();
@@ -52,10 +60,11 @@ window.onload=(()=>{
 		}
 
 		}).filter(item=>item!==undefined);
+		*/
 
 
 		//2) use your promise.all functions in bluebird to then handle the results
-		Promise.all(calls)
+		/*Promise.all(calls)
 			.then(results=>{
 				// remember that you are working with arrays of arrays of results
 
@@ -87,7 +96,7 @@ window.onload=(()=>{
 
 
 
-	});
+	});*/
 });
 
 
@@ -99,7 +108,15 @@ const subjectFormat = (subjectTerm)=>{
 
 
 const grabFormat = ((subject, format)=>{
-	var sample = `https://api.dp.la/v2/items?q="${subject}"&page_size=50&sourceResource.date.before=1900-01-01&sourceResource.type=${format}&api_key=${kDP}`;
+	var sample = `http://api.zotero.org/groups/2144277/items`;
+	var paraObj = {
+		params: {
+			format: format,
+			include: 'bib',
+			v: '3'
+			//'api_key':
+		}
+	}
 
 	return Axios.get(sample);
 
