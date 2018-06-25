@@ -15,41 +15,79 @@ var params = {
 			v: '3',
 			start: '0',
 			q: 'TESTING',
-			qmode: '',
+			//qmode: '',
 			'api_key': key
-		}
+}
 
 //main
 window.onload=(()=>{
 	//console.log('window loaded');
-	// var getSample = basicCall('get', params, 25, null);
+	var getSample = basicCall('zotero','get', params, 25, null);
 	// var getReturns = basicReturns(getSample);
 
 	// getReturns.then(console.log);
 
-	var getSample = basicCall('put', params, 25, 'testing tag');
+	//var getSample = basicCall('put', params, 25, 'testing tag');
 	var getReturns = basicReturns(getSample);
 	getReturns.then(console.log);
 
 	//console.log('first call',results)
 	//data->config->params will let you know if you are accessing things correctly
 
+	//display info in cards
+	getReturns.then(items =>{
+		var disAll= [];
+	    var disAll = items.map(item=>item);
+	    console.log('here', disAll);
+	    addCards(disAll);
+	});
+    
+	//getSearchParams();
+
 
 });
+
+const getSearchParams = (() => {
+	//get the params from searching area
+	//pass the params to the 'q'
+
+	//add the information type for searching(button to choose like 'title','tag'...)
+	//link the button to the certain type of searching
+		document.querySelector('#mainform').addEventListener('submit', (event)=>{
+		event.preventDefault();
+		var returns = [].slice.call(event.target);
+		returns.pop();
+
+		console.log('listener', returns);
+		//could do a filter based on subject
+		var values = returns.filter(item=>{
+			return item.id === 'subject'
+		})[0].value;
+		console.log('subject value', value);
+		})
+
+	});
 
 
 /* write as many functions down here as desired, to simplify your code and avoid repetition */
 
-//so: overall structure is to have a function that allows you to do everything at once
+//overall structure is to have a function that allows you to do everything at once
+//source: the api you want to use
 //type: 'get','put','post'
 //params: the object of parameters you defined globally
 //limit: the # of items returned 
-//	NOTE-> meg also had issues with limit not working for anything other than 25?
-//		-> should look into bc wth
-
-
 //adds: either a keyword or a new object
-const basicCall=((type,params,limit,adds)=>{
+
+//TASK -> axios 'get' from multiple api's
+//ideas: 
+//1)edit basicCall so that you have another parameter, 'source', and can then specifiy which api 
+//	want to search from
+//2)edit basicCall so that there are multiple 'sample's that each reference a different api
+//	can then do multiple calls, each to the diff samples, each with specific parameters
+//	make different 'params' variable so that each one is specific to an api, can then pass in when
+//	making a specific api call
+
+const basicCall=((source,type,params,limit,adds)=>{
 
 			var format= params.format, 
 			include= params.include,
@@ -58,7 +96,15 @@ const basicCall=((type,params,limit,adds)=>{
 			q= params.q
 			//qmode: '',
 
-	var sample = `http://api.zotero.org/groups/2144277/items/top`;
+	var sample;
+
+	if(source === 'zotero'){
+		sample = `http://api.zotero.org/groups/2144277/items/top`;
+	}else if (source === 'nypl'){
+		sample = `http://api.repo.nypl.org/api/v1/items`;
+	}else{
+		sample =  `http://api.zotero.org/groups/2144277/items/top`;
+	}
 	//var sampleTags = `http://api.zotero.org/groups/2144277/items/<itemKey>/tags`;
 
 	var paraObj = {
@@ -229,6 +275,8 @@ const basicReturns = (promObj=>{
 	.catch(console.log);
 	
 	return allData; //promise with master array of data
+
+	//addCards(data);
 	
 })
 
@@ -256,14 +304,22 @@ const arrStr = (item)=>{
 
 const simpEntry = (itemObj)=>{
 	return {
-		link: itemObj.isShownAt,
-		thumb: (itemObj.object)? itemObj.object: null,
-		title: (itemObj.sourceResource.title) ? arrStr(itemObj.sourceResource.title) : null,
-		creator:(itemObj.sourceResource.creator) ? arrStr(itemObj.sourceResource.creator) : null,
-		publisher: (itemObj.sourceResource.publisher) ? arrStr(itemObj.sourceResource.publisher) : null,
-		type: (itemObj.sourceResource.type) ? arrStr(itemObj.sourceResource.type) : null,
-		date: itemObj.sourceResource.date.begin,
-		source: itemObj.provider.name,
+
+		link: itemObj.links.alternate.herf,
+		place: (itemObj.data.place)? itemObj.data.place: null,
+		title: (itemObj.data.title) ? arrStr(itemObj.data.title) : null,
+		author:(itemObj.data.creators) ? arrStr(itemObj.data.creators) : null,
+		//abstract: (itemObj.data.abstractNote) ? arrStr(itemObj.data.abstractNote) : null,
+		date: itemObj.data.date
+
+		// link: itemObj.isShownAt,
+		// thumb: (itemObj.object)? itemObj.object: null,
+		// title: (itemObj.sourceResource.title) ? arrStr(itemObj.sourceResource.title) : null,
+		// creator:(itemObj.sourceResource.creator) ? arrStr(itemObj.sourceResource.creator) : null,
+		// publisher: (itemObj.sourceResource.publisher) ? arrStr(itemObj.sourceResource.publisher) : null,
+		// type: (itemObj.sourceResource.type) ? arrStr(itemObj.sourceResource.type) : null,
+		// date: itemObj.sourceResource.date.begin,
+		// source: itemObj.provider.name,
 	}
 }
 
@@ -283,21 +339,40 @@ const addCards = (arr) => {
 
 		//4) add the html with inserted js to create the cards here
 
+
+		var card = '';
+
 		var card =` <div class="card" style="width: 17rem; margin-right: 1rem;margin-top: 2rem;">
 		  <div class="card-header">
-		    date: ${entry.date}
+		    ItemType: ${entry.itemType}
 		  </div>
-	    <img class="card-img-top align-self-center" src="${entry.thumb}" style="width: 10rem;" alt="Card image cap">
 	    <div class="card-body">
-	    <a href=${entry.link} target="_blank"><h5 class="card-title">${entry.title}</h5></a>
+	    <a href=${entry.url} target="_blank"><h5 class="card-title">${entry.title}</h5></a>
 	      <ul>
-	      	<li>creator:${entry.creator}</li>
-	      	<li>publisher:${entry.publisher}</li>
-	      	<li>type:${entry.type}</li>
-	      	<li>source:${entry.source}</li>
+	      	<li>place:${entry.place}</li>
+	      	<li>author:${entry.creators}</li>
+	      	<li>date:${entry.date}</li>
+	      	<li>tag:${entry.tags}</li>
 	      </ul>
 	    </div>
-  </div>`
+  		</div>`
+
+
+		// var card =` <div class="card" style="width: 17rem; margin-right: 1rem;margin-top: 2rem;">
+		//   <div class="card-header">
+		//     date: ${entry.date}
+		//   </div>
+	 //    <img class="card-img-top align-self-center" src="${entry.thumb}" style="width: 10rem;" alt="Card image cap">
+	 //    <div class="card-body">
+	 //    <a href=${entry.link} target="_blank"><h5 class="card-title">${entry.title}</h5></a>
+	 //      <ul>
+	 //      	<li>creator:${entry.creator}</li>
+	 //      	<li>publisher:${entry.publisher}</li>
+	 //      	<li>type:${entry.type}</li>
+	 //      	<li>source:${entry.source}</li>
+	 //      </ul>
+	 //    </div>
+  // </div>`
 
 		cards.innerHTML += card ;
 	})
