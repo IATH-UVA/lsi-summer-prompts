@@ -1,0 +1,24 @@
+# VIM/Emacs
+*.swp
+*~
+
+# Travis-CI configuration
+.travis.yml
+
+# Coverage directory used by tools like istanbul
+coverage
+
+# Generated API docs
+doc
+docs
+
+# Local dependencies
+node_modules
+
+# Do not publish test and dev files
+test
+yuidoc.json
+makefile
+watch.js
+.eslintrc
+examples
