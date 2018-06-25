@@ -235,7 +235,12 @@ window.onload=(()=>{
 					if (!item.object && item.provider.name==="HathiTrust"){
 						item.object = getHathiPage(item.originalRecord);
 						return simpEntry(item);
-					} else {
+					}
+					else if(item.provider.name ==="NYPL"){
+
+					} 
+
+					else {
 						return simpEntry(item);
 					}
 				}).sort((a,b)=>{return a.date-b.date});
@@ -245,18 +250,9 @@ window.onload=(()=>{
 
 
 				// 5) bonus - add buttons to resort existing cards order or to display additional values on the side.
-
-
 			})
 			.catch(console.log);
-
-
-
-
-
 	});  
-
-
 });
 
 
