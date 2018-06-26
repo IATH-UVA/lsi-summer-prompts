@@ -11,7 +11,7 @@ var params = {
 			include: 'data',
 			v: '3',
 			start: '0',
-			q: 'muskau',
+			q: '',
 			qmode:'',
 			//tag: '',
 			//itemType: 'book',
@@ -21,23 +21,8 @@ var params = {
 window.onload=(()=>{
 	console.log('window loaded');
 
-/*
-	document.querySelector('#mainform').addEventListener('submit', (event)=>{
-		event.preventDefault();
-		var returns = [].slice.call(event.target);
-		returns.pop();
 
-		var values = returns.map(item=>{
-			return {
-				id: item.id,
-				checked: (item.className.includes('check'))? item.checked : null,
-				value: item.value
-				}
-		});
-	}
-
-	);
-*/
+    //getSearchParams();
 
 	var getSample = basicCall('get', params, 80, null);
 	//console.log(getSample);
@@ -46,27 +31,30 @@ window.onload=(()=>{
 	//console.log(getReturns);
 
 	getReturns.then(items =>{
-		var disAll= [];
 	    var disAll = items.map(item=>item);
 	    console.log('here', disAll);
 	    addCards(disAll);
+	    getMoreData(disAll);
 	});
     
-	getSearchParams();
+    //console.log('here1', disAll);
+	//getSearchParams();
 
+	//getMoreData(disAll);
+
+/*
 	// var getArr= getReturns.then(result =>{
 	// 	return result.data;
 	// });
 	// console.log('Display1: ',getArr);
-/*
+
 	var disAll= [];
 	var disAll = getReturns.map(item=>item.data);
 
 	console.log('Display: ',disAll);
-*/
-	
 
 	//addCards(getReturns.then());
+*/
 
 });
 
@@ -78,31 +66,32 @@ window.onload=(()=>{
 
 
 
+
 const getSearchParams = (() =>{
 	//get the params from searching area
 	//pass the params to the 'q'
 
 	//add the information type for searching(button to choose like 'title','tag'...)
 	//link the button to the certain type of searching
+
 		document.querySelector('#mainform').addEventListener('submit', (event)=>{
 		event.preventDefault();
+
 		var returns = [].slice.call(event.target);
 		returns.pop();
 
-		console.log('i am here');
+		console.log('listener', returns);
 
-		var values = returns.map(item=>{
-			return {
-				id: item.key,
-				checked: (item.className.includes('check'))? item.checked : null,
-				value: item.value
-				}
+		var value = returns.filter(item=>{
+			return item.id === 'subject'
 
-		});
-		console.log('wa');
+		})[0].value;
+		console.log('subject value', value);
+		params.q = value;
 	}
 
 	)});
+
 
 
 
@@ -117,8 +106,7 @@ const basicCall=((type,params,limit,adds)=>{
 			//tag = params.tag;
 			//key = params.key;
 	
-	
-	
+		
 	
 	var sample = `http://api.zotero.org/groups/2144277/items/top`
 	var paraObj = {
@@ -141,7 +129,7 @@ const basicCall=((type,params,limit,adds)=>{
 			
 			while(start < +total){
 				start = i*iterator; //put into a series of array
-				console.log(i);
+				//console.log(i);
 				//reference issues: use a simple string/int var to hold parameter... if using objects this will be re-assigned
 				series.push(Axios[type](sample, {params: {format, include, v, iterator, start, q, 'api_key':key} }));
 				i++;
@@ -175,21 +163,20 @@ const basicReturns = (promObj=>{
 	})
 	.catch(console.log);
 
-	console.log('here');
+	//console.log('here');
 
-	
 	var allData = Promise.all(getSeries).then(resSeries=>{
 		
 		var res = resSeries.map(res=>res.data);
 		data = data.concat(...res);
 		data = data.map(res=>res.data);
-		console.log('second return: ', data);
+		//console.log('second return: ', data);
 		return data;
 		addCards(data);
 		
 	})
 	.catch(console.log);
-	console.log('third return: ', allData);
+	//console.log('third return: ', allData);
 	return allData; //promise with master array of data
 
 	addCards(data);
@@ -198,9 +185,151 @@ const basicReturns = (promObj=>{
 })
 
 
+//.......................................................
+/*
+//get urls from the results
+    ..new array(1) to hold the url data
+
+//read the urls and recognize the right methods to get api
+    ..map the array(1) and collect the url from the same web-api to a new array(2)
+
+//direct the url to specific get api function
+//get access to that api
+    ..read the url in the array(2)
+    ..grab data through api
+    ..get results and display
+*/
+
+const getMoreData = (resultArr) =>{
+	//array(1)
+	var urlArr=resultArr.map(item=>item.url);
+	//urlArr.push(resultArr.map(item=>item.url));
+	//console.log('array here', urlArr);
+
+    //array(2)s
+	var BHLArr=[], HathiArr=[], LOCArr=[], NYPLArr=[], ArchiveArr=[];
+
+  for(var i=0;i<urlArr.length;i++){
+	if(urlArr[i].includes('www.biodiversitylibrary.org')){
+		BHLArr.push(urlArr[i]);
+		//console.log('see BHL here', BHLArr);
+		//getDataFromBHL();
+
+	} else if(urlArr[i].includes('catalog.hathitrust.org')){
+		HathiArr.push(urlArr[i]);
+		//console.log('see Hathi here', HathiArr);
+		//getDataFromHathitrust();
+
+	} else if(urlArr[i].includes('loc.gov')){
+		LOCArr.push(urlArr[i]);
+		//console.log('see LOC here', LOCArr);
+		//getDataFromLOC();
+
+	} else if(urlArr[i].includes('digitalcollections.nypl.org')){
+		NYPLArr.push(urlArr[i]);
+		//console.log('see NYPL here', NYPLArr);
+		//getDataFromNYPL();
+
+	} else if(urlArr[i].includes('archive.org')){
+		ArchiveArr.push(urlArr[i]);
+		//console.log('see Archive here', ArchiveArr);
+		//getDataFromArchive();
+
+	} else {
+		console.log('Cannot dig deeper ');//doing nothing
+	};
+  };
+
+  console.log('see LOC here', LOCArr);
+
+  getDataFromBHL(BHLArr);
+  getDataFromHathitrust(HathiArr);
+  getDataFromLOC(LOCArr);
+  getDataFromNYPL(NYPLArr);
+  getDataFromArchive(ArchiveArr);
+
+}
 
 
 
+const getDataFromBHL=(arrBHL)=>{
+	//API information page --- https://biodivlib.wikispaces.com/Developer+Tools+and+API
+	console.log('BHL');
+
+	//extract data using HTTP GET request, append the argument &apikey=<key+value> to the method call
+	//map through all the urls, extract key information for each item
+	//call the function and pass the key information
+
+/*
+	var sample = `https://www.loc.gov/`
+	var paraObj = {
+		params: {
+			fo='json',
+			page_size: '50',
+			'sourceResource.date.before': '1900-01-01',
+			'sourceResource.type': format,
+			api_key: kDP,
+
+		}
+	}
+*/
+
+}
+
+
+const getDataFromHathitrust=(arrHathi)=>{
+	//API information page --- https://libraryofcongress.github.io/data-exploration/#requests
+	console.log('Hathitrust');
+	
+}
+
+
+const getDataFromLOC=(arrLOC)=>{
+	console.log('LOC');
+
+	//request a specific item ---- /item/{identifier}/? 
+	//for example --- https://www.loc.gov/item/ggb2006012811/?fo=json
+
+	//check the format of the existing urls
+	//get item id from the existing array of url
+	//map through the id information and grab data from api request
+
+/*  for(var i=0; i<LOCArr.length; i++){
+	var LocID = LOCArr[i].substr(25, 8);
+	//another ways: str.slice(beginIndex[, endIndex]), str.split([separator[, limit]])
+}
+    
+
+    const grabFormat = ((subject, format)=>{
+	var sample = `https://www.loc.gov/`
+	var paraObj = {
+		params: {
+			fo:'json',
+			c:'50',
+			at:item,resources,reproductions
+            //?? --- at!=more_like_this
+            sb:date_desc
+            sb:shelf_id
+			api_key: kDP,
+		}
+	}
+	return Axios.get(sample,paraObj);
+	});
+*/
+	
+}
+
+
+const getDataFromNYPL=(arrNYPL)=>{
+	console.log('NYPL');
+	
+}
+
+
+const getDataFromArchive=(arrArchive)=>{
+	console.log('online Archive');
+	
+}
 
 
 //for instance this is written to simplify tapping the MARC entries of Hathi records to get a page thumbnail
@@ -216,13 +345,19 @@ const getHathiPage = (itemOrigRec) =>{ //pass in entries' original record which 
 
 }
 
+
+
+
 const arrStr = (item)=>{
 	var resEntry = '';
 	Array.isArray(item)? resEntry=item[0] : resEntry=item;
 
 	return resEntry;
-
 }
+
+
+
+
 
 const simpEntry = (itemObj)=>{
 	return {
@@ -234,6 +369,8 @@ const simpEntry = (itemObj)=>{
 		date: itemObj.data.date,
 	}
 }
+
+
 
 
 const addCards = (arr) => {

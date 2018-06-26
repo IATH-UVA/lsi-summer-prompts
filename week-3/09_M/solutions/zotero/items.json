@@ -1,0 +1,78 @@
+{
+    "key": "H67SLP5E",
+    "version": 3007,
+    "library": {
+        "type": "group",
+        "id": 2144277,
+        "name": "landscape-studies",
+        "links": {
+            "alternate": {
+                "href": "https://www.zotero.org/groups/landscape-studies",
+                "type": "text/html"
+            }
+        }
+    },
+    "links": {
+        "self": {
+            "href": "https://api.zotero.org/groups/2144277/items/H67SLP5E",
+            "type": "application/json"
+        },
+        "alternate": {
+            "href": "https://www.zotero.org/groups/landscape-studies/items/H67SLP5E",
+            "type": "text/html"
+        }
+    },
+    "meta": {
+        "createdByUser": {
+            "id": 1363467,
+            "username": "siteations",
+            "name": "",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/siteations",
+                    "type": "text/html"
+                }
+            }
+        },
+        "creatorSummary": "Terrazas",
+        "parsedDate": "2002-11",
+        "numChildren": 1
+    },
+    "data": {
+        "key": "H67SLP5E",
+        "version": 3007,
+        "itemType": "webpage",
+        "title": "Java Media APIs Cross-Platform Imaging, Media and Visualization TESTING",
+        "creators": [
+            {
+                "creatorType": "author",
+                "firstName": "Alejandro",
+                "lastName": "Terrazas"
+            }
+        ],
+        "abstractNote": "",
+        "websiteTitle": "",
+        "websiteType": "",
+        "date": "Nov. 2002",
+        "shortTitle": "",
+        "url": "",
+        "accessDate": "",
+        "language": "",
+        "rights": "",
+        "extra": "",
+        "tags": [
+            {
+                "tag": "test tag here"
+            },
+            {
+                "tag": "test cli here"
+            }
+        ],
+        "collections": [
+            "GL53DSEC"
+        ],
+        "relations": {},
+        "dateAdded": "2018-06-22T14:43:42Z",
+        "dateModified": "2018-06-22T18:22:53Z"
+    }
+}

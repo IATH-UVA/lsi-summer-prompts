@@ -17,27 +17,40 @@ var params = {
 		}
 
 window.onload=(()=>{
+
 	console.log('window loaded');
 	
 	var getSample = basicCall('get', params, 25, null);
+	console.log(getSample);
+	
 	var getReturns = basicReturns(getSample);
 	
 	getReturns.then(console.log);
+	
+	testApi();
 
 
 });
+
+const testApi = ()=>{
+	
+	var res = Axios.get('http://api.zotero.org/groups/2144277/items/FCB5J7RN?key=' + key).then(console.log);
+	
+	
+}
 
 
 /* write as many functions down here as desired, to simplify your code and avoid repetition */
 
 const basicCall=((type,params,limit,adds)=>{
+
 			var format= params.format, 
-			include= params.include,
+			include = params.include,
 			v= params.v,
-			start = params.start,
+			start = params.start;
 			//q: '',
 			//qmode: '',
-			key = params.key;
+			//key = params.key;
 	
 	
 	
@@ -58,7 +71,7 @@ const basicCall=((type,params,limit,adds)=>{
 			initial = result.data;
 			var i=1;
 			
-			console.log('second call: ', total, initial, params, paraObj);
+			console.log('first call: ', result);
 			
 			while(start < +total){
 				start = i*iterator;
@@ -67,6 +80,12 @@ const basicCall=((type,params,limit,adds)=>{
 				series.push(Axios[type](sample, {params: {format, v, include, start, 'api_key':key} }));
 				i++;
 			}
+			
+			
+			console.log({
+				initial: initial,
+				series: series
+			});
 			 
 			return {
 				initial: initial,
@@ -96,6 +115,7 @@ const basicReturns = (promObj=>{
 		var res = resSeries.map(res=>res.data);
 		data = data.concat(...res);
 		data = data.map(res=>res.data);
+		
 		return data;
 		
 	})

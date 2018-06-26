@@ -1,0 +1,17 @@
+do some batch editing by command-line
+
+
+URL="https://api.zotero.org/groups/2144277/items/......?key=[my zotero key here]"
+
+curl $URL > items.json
+
+(edit items.json programmatically here)
+
+curl -X PUT -d @items.json -v -H "Expect:" $URL
+(to edit) 
+
+or (to replace)
+curl -X POST -d @items.json -v -H "Expect:" $URL
+
+or (to selective update tags)
+curl -X PATCH -d @items.json -v -H "Expect:" $URL
