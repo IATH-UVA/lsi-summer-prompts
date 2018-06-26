@@ -14,7 +14,7 @@ var zParams = {
 	v: '3',
 	start: '0',
 	q: 'TESTING',
-	//qmode: '',
+	//qmode: '', 
 	'api_key': zKey
 }
 
@@ -139,7 +139,7 @@ const basicCall=((source,type,params,limit,adds)=>{
 	var bhlSample = `https://www.biodiversitylibrary.org/api2/httpquery.ashx/search`;
 
 	var bhlParaObj = {
-		params: {bhlOP, bhlSubject, bhlFormat, 'apikey' :bhlKey}
+		params: {'op': bhlOP,'subject': bhlSubject, 'format': bhlFormat, 'apikey' :bhlKey}
 	}
 
 	//var sampleTags = `http://api.zotero.org/groups/2144277/items/<itemKey>/tags`;
@@ -220,17 +220,17 @@ const basicCall=((source,type,params,limit,adds)=>{
 		case 'bhl':
 			var basic3 = Axios[type](bhlSample, bhlParaObj)
 				.then(result3=>{
-					total=500;
+					total=500;//should probs change -- must look into more
 					initial = result3.data;
 					var bhlStart = 0;
 					var i = 1;
 
-					console.log('bhl get call: ', initial, bhlParams, bhlParaObj);
+					console.log('bhl get call: ', initial, 'here', bhlParams, bhlParaObj);
 					console.log('result3.data: ', result3.data);
 
 					while(bhlStart < +total){
 						bhlStart = i*iterator;
-						series.push(Axios[type](bhlSample, {params: {bhlOP, bhlSubject,  bhlFormat, 'apikey':bhlKey}}));
+						series.push(Axios[type](bhlSample, {params: {'op':bhlOP,'subject': bhlSubject,'format': bhlFormat, 'apikey':bhlKey}}));
 						i++;
 					}
 
@@ -243,7 +243,7 @@ const basicCall=((source,type,params,limit,adds)=>{
 					}
 				})
 				.catch(console.log);
-				console.log('url',bhlSample,bhlParaObj.params);
+				console.log(basic3);
 
 		return basic3;
 		break;

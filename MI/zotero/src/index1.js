@@ -8,7 +8,7 @@ import './style.css';
 const key = '4XchKcJeLMhVHlRj2J80nzAm' ;
 
 //global parameters set up(what happens when you want to change the parameters?)
-var params = {
+var zParams = {
 			//also had problems with limit, which is why we are working with 25 in the onload
 			format: 'json',
 			include: 'data',
@@ -19,15 +19,17 @@ var params = {
 			'api_key': key
 }
 
+
+//
 //main
 window.onload=(()=>{
 	//console.log('window loaded');
-	var getSample = basicCall('zotero','get', params, 25, null);
+	var getSample = basicCall('zotero','get', zParams, 25, null);
 	// var getReturns = basicReturns(getSample);
 
 	// getReturns.then(console.log);
 
-	//var getSample = basicCall('put', params, 25, 'testing tag');
+	//var getSample = basicCall('put', zParams, 25, 'testing tag');
 	var getReturns = basicReturns(getSample);
 	getReturns.then(console.log);
 
@@ -87,24 +89,24 @@ const getSearchParams = (() => {
 //	make different 'params' variable so that each one is specific to an api, can then pass in when
 //	making a specific api call
 
+//remake formats/parameters/and samples specific to each api
+//then, make axios 'get' calls specific to each format/param/sample, and PAGE RESULTS
+
+//edit to grab more than one page
+
 const basicCall=((source,type,params,limit,adds)=>{
 
-			var format= params.format, 
-			include= params.include,
-			v= params.v,
-			start = params.start,
-			q= params.q
-			//qmode: '',
+	//zotero format
+	var zFormat= params.format, 
+	include= params.include,
+	v= params.v,
+	start = params.start,
+	q= params.q
+	//qmode: '',
 
-	var sample;
+	var zSample = `http://api.zotero.org/groups/2144277/items/top`;
+	var nySample = `http://api.repo.nypl.org/api/v1/items`;
 
-	if(source === 'zotero'){
-		sample = `http://api.zotero.org/groups/2144277/items/top`;
-	}else if (source === 'nypl'){
-		sample = `http://api.repo.nypl.org/api/v1/items`;
-	}else{
-		sample =  `http://api.zotero.org/groups/2144277/items/top`;
-	}
 	//var sampleTags = `http://api.zotero.org/groups/2144277/items/<itemKey>/tags`;
 
 	var paraObj = {
@@ -124,7 +126,7 @@ const basicCall=((source,type,params,limit,adds)=>{
 	switch(func){
 
 		case 'get':
-			var basic = Axios[type](sample, paraObj)
+			var basic = Axios[type](zSample, paraObj)
 				.then(result=>{
 
 					total = result.headers['total-results'];
@@ -135,7 +137,7 @@ const basicCall=((source,type,params,limit,adds)=>{
 					
 					while(start < +total){
 						start = i*iterator;
-						series.push(Axios[type](sample, {params: {format, v, include, start, q, 'api_key':key} }));
+						series.push(Axios[type](zSample, {params: {format, v, include, start, q, 'api_key':key} }));
 		 				i++;
 					}
 					 
@@ -155,7 +157,7 @@ const basicCall=((source,type,params,limit,adds)=>{
 			//when 'putting', first you need access to what you need to put
 			//stuff on..... i.e. you need to use 'get' in order
 			//to 'get' the items you want to manipulate.
-			var basic = Axios['get'](sample, paraObj)
+			var basic = Axios['get'](zsample, paraObj)
 				.then(result=>{
 
 					total = result.headers['total-results'];
@@ -166,7 +168,7 @@ const basicCall=((source,type,params,limit,adds)=>{
 					
 					while(start < +total){
 						start = i*iterator;
-						series.push(Axios['get'](sample, {params: {format, v, include, start, q, 'api_key':key} }));
+						series.push(Axios['get'](zsample, {params: {format, v, include, start, q, 'api_key':key} }));
 		 				i++;
 					}
 
