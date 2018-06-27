@@ -82,7 +82,7 @@ const addCards = (arr) => {
 
 	arr.forEach(entry=>{
 
-		var card =
+		var card = 
 		`<div class="card" style="width: 17rem; margin-right: 1rem;margin-top: 2rem;">
 
 	    <div class="card-header">

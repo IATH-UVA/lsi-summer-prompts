@@ -13,6 +13,7 @@ var params = {
 			start: '0',
 			q: '',
 			qmode:'',
+			sort: 'title',
 			//tag: '',
 			//itemType: 'book',
 			'api_key': key
@@ -104,8 +105,8 @@ const basicCall=((type,params,limit,adds)=>{
 			//key = params.key;
 	
 		
-	
-	var sample = `http://api.zotero.org/groups/2144277/items/top`
+	//only looking at items in BHL folder
+	var sample = `http://api.zotero.org/groups/2144277/collections/KXUA5LUF/items/top`
 	var paraObj = {
 		params: {format, include, v, limit, start, q, 'api_key':key}
 	}
@@ -176,7 +177,7 @@ const basicReturns = (promObj=>{
 	//console.log('third return: ', allData);
 	return allData; //promise with master array of data
 
-	addCards(data);
+	addCards(allData);
 	//console.log(addCards);
 	
 })
@@ -250,6 +251,9 @@ const getMoreData = (resultArr) =>{
 const getDataFromBHL=(arrBHL)=>{
 	//API information page --- https://biodivlib.wikispaces.com/Developer+Tools+and+API
 	console.log('BHL');
+
+	var imageThumbURL = [];
+
 	for(var i = 0; i < arrBHL.length; i++){
 		var j = arrBHL[i];
 
@@ -264,8 +268,8 @@ const getDataFromBHL=(arrBHL)=>{
 
 		if(j.includes('item')){
 			itemKey = '1';
-			console.log(i,j, itemKey);
-			console.log('item key: ', key);
+			// console.log(i,j, itemKey);
+			// console.log('item key: ', key);
 
 			var bhlParams1 = {
 				params: {
@@ -274,19 +278,20 @@ const getDataFromBHL=(arrBHL)=>{
 					op: 'GetItemMetadata',
 					itemid: key,
 					parts: 't',
-					pages: 't'
+					pages: 't',
+					ocr: 't'
 				}
 			}
 			Axios.get(bhlSample, bhlParams1).then(res=>{
-				console.log('item params',bhlParams1);
-				console.log('get call for item: ', res)
+
+				console.log('get call for item: ', res.data.Result.ThumbnailPageID);
+				imageThumbURL.push(res.data.Result.ThumbnailPageID);
+
 			}).catch(console.log);
 		}
 
 		if(j.includes('bibliography')){
 			bibKey = '0';
-			console.log(i,j, bibKey);
-			console.log('bib key: ', key);
 
 			var bhlParams2 = {
 				params: {
@@ -298,17 +303,40 @@ const getDataFromBHL=(arrBHL)=>{
 				}
 			}
 			Axios.get(bhlSample, bhlParams2).then(res1=>{
-				console.log('bib params',bhlParams2);
-				console.log('get call for bib: ', res1)
+
+				var t = res1.data.Result.Items.length;
+
+				for(var a = 0; a < t; a++){
+					imageThumbURL.push(res1.data.Result.Items[a].ThumbnailPageID);
+				}
+				
 			}).catch(console.log);
 		}
 	}
+
+	console.log("imageThumbURLs",imageThumbURL);
+
+	//append image to footer
+	document.querySelector('#footer').append(imageThumbURL[0]);
+
+
+	return getDataFromBHL;
 }
+
+//------------------------------Viewing Results from BHL-----------------------------------
+//use bootstrap images https://www.w3schools.com/bootstrap/bootstrap_images.asp
+//	1) get the thumbnail URL
+//	2) use it as the 'src' for a responsive embed
+//		-> https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_responsive_embed&stacked=h
+//	3) create images in a similar vain to how the cards were created
+//	4) add the images to the footer bar
+//-----------------------------------------------------------------------------------------
 
 
 const getDataFromHathitrust=(arrHathi)=>{
 	//API information page --- https://libraryofcongress.github.io/data-exploration/#requests
 	console.log('Hathitrust');
+
 	
 }
 
@@ -392,7 +420,7 @@ const simpEntry = (itemObj)=>{
 		link: itemObj.links.alternate.herf,
 		place: (itemObj.data.place)? itemObj.data.place: null,
 		title: (itemObj.data.title) ? arrStr(itemObj.data.title) : null,
-		author:(itemObj.data.creators) ? arrStr(itemObj.data.creators) : null,
+		author:(itemObj.data.creators[0].lastName) ? arrStr(itemObj.data.creators[0].lastName) : null,
 		//abstract: (itemObj.data.abstractNote) ? arrStr(itemObj.data.abstractNote) : null,
 		date: itemObj.data.date,
 	}
@@ -422,16 +450,16 @@ const addCards = (arr) => {
 		  <div class="card-header">
 		    ItemType: ${entry.itemType}
 		  </div>
-	    <div class="card-body">
-	    <a href=${entry.url} target="_blank"><h5 class="card-title">${entry.title}</h5></a>
-	      <ul>
-	      	<li>place:${entry.place}</li>
-	      	<li>author:${entry.creators}</li>
-	      	<li>date:${entry.date}</li>
-	      	<li>tag:${entry.tags}</li>
-	      </ul>
-	    </div>
-  </div>`
+		    <div class="card-body">
+		    <a href= ${entry.url} target="_blank"><h5 class="card-title"> ${entry.title}</h5></a>
+		      <ul>
+		      	<li>place: ${entry.place}</li>
+		      	<li>author: ${entry.creators[0].lastName}, ${entry.creators[0].firstName}</li>
+		      	<li>date: ${entry.date}</li>
+		      	<li>tag: ${entry.tags}</li>
+		      </ul>
+		    </div>
+  		</div>`
 /*
 var card =` <div class="card" style="width: 17rem; margin-right: 1rem;margin-top: 2rem;">
 		  <div class="card-header">

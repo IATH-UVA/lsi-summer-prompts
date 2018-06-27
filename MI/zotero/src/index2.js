@@ -144,6 +144,9 @@ const basicCall=((source,type,params,limit,adds)=>{
 
 	//var sampleTags = `http://api.zotero.org/groups/2144277/items/<itemKey>/tags`;
 
+	//zotero call first, then calls to the other apis based on zotero results
+	//
+
 	var initial;
 
 	var total;
