@@ -37,6 +37,8 @@ window.onload=(()=>{
 	    getMoreData(disAll);
 	});
     
+    //relatedItemsLOC(resultFirst);
+
     //console.log('here1', disAll);
 	//getSearchParams();
 
@@ -145,7 +147,7 @@ const basicCall=((type,params,limit,adds)=>{
 		
 		return basic;
 
-		addCards(basic);
+		//addCards(basic);
 
 });
 
@@ -172,14 +174,14 @@ const basicReturns = (promObj=>{
 		data = data.map(res=>res.data);
 		//console.log('second return: ', data);
 		return data;
-		addCards(data);
+		//addCards(data);
 		
 	})
 	.catch(console.log);
 	//console.log('third return: ', allData);
 	return allData; //promise with master array of data
 
-	addCards(data);
+	//addCards(data);
 	//console.log(addCards);
 	
 })
@@ -220,7 +222,7 @@ const getMoreData = (resultArr) =>{
 		//console.log('see Hathi here', HathiArr);
 		//getDataFromHathitrust();
 
-	} else if(urlArr[i].includes('loc.gov')){
+	} else if(urlArr[i].includes('www.loc.gov')){
 		LOCArr.push(urlArr[i]);
 		//console.log('see LOC here', LOCArr);
 		//getDataFromLOC();
@@ -240,7 +242,9 @@ const getMoreData = (resultArr) =>{
 	};
   };
 
+  console.log('see Hathi here', HathiArr);
   console.log('see LOC here', LOCArr);
+  console.log('see Archive here', ArchiveArr);
 
   getDataFromBHL(BHLArr);
   getDataFromHathitrust(HathiArr);
@@ -254,32 +258,55 @@ const getMoreData = (resultArr) =>{
 
 const getDataFromBHL=(arrBHL)=>{
 	//API information page --- https://biodivlib.wikispaces.com/Developer+Tools+and+API
-	console.log('BHL');
+	//console.log('BHL');
 
 	//extract data using HTTP GET request, append the argument &apikey=<key+value> to the method call
 	//map through all the urls, extract key information for each item
 	//call the function and pass the key information
 
-/*
-	var sample = `https://www.loc.gov/`
-	var paraObj = {
-		params: {
-			fo='json',
-			page_size: '50',
-			'sourceResource.date.before': '1900-01-01',
-			'sourceResource.type': format,
-			api_key: kDP,
-
-		}
-	}
-*/
-
 }
 
 
 const getDataFromHathitrust=(arrHathi)=>{
-	//API information page --- https://libraryofcongress.github.io/data-exploration/#requests
-	console.log('Hathitrust');
+	//API information page --- 
+	//console.log('Hathitrust');
+    //access key = 3195a13ad6;
+    //secret key = b98e006776869701ec946a444c2d;
+
+    var hathiID = [];
+    for(var i=0; i<arrHathi.length; i++){
+	hathiID.push(arrHathi[i].substr(arrHathi[i].lastIndexOf('/')+1));
+    }
+    console.log('HHHH', hathiID);
+
+///*
+    //code for getting metadata
+
+	for(var i=0; i<arrHathi.length; i++){
+    //console.log('address ', i, arrArchive[i]);
+
+    const grabFormat = ((subject, format)=>{
+	var sample = 'https://babel.hathitrust.org/cgi/htd/volume/meta/:' + hathiID[i] + '?format=json&v=2';
+	//var sample = 'https://archive.org/services/img/' + archiveID[i]; //automatically determine the appropriate image to represent an item
+	//var sample = 'https://archive.org/download/' + archiveID[i] + '/page/cover_t.jpg'; //coverpage
+
+	console.log('fromHathi', sample);
+	return Axios.get(sample);
+	});
+
+
+    var query = grabFormat(null, 'json');
+    query.then(result=>{
+
+				console.log('hathi', result.data);
+				//console.log(result);
+				var resultFirst=result.data;
+				
+	}).catch((error) =>{console.log('error')});
+
+    };
+
+    //*/
 	
 }
 
@@ -293,42 +320,129 @@ const getDataFromLOC=(arrLOC)=>{
 	//check the format of the existing urls
 	//get item id from the existing array of url
 	//map through the id information and grab data from api request
+/*
 
-/*  for(var i=0; i<LOCArr.length; i++){
-	var LocID = LOCArr[i].substr(25, 8);
+//0:"https://www.loc.gov/item/gm71002199/"
+//1:"https://www.loc.gov/item/74692191/"
+    var LocID = [];
+    for(var i=0; i<arrLOC.length; i++){
+	LocID.push(arrLOC[i].substr(25,arrLOC[i].indexOf('/', 26)));
 	//another ways: str.slice(beginIndex[, endIndex]), str.split([separator[, limit]])
-}
-    
+    }
+    console.log(LocID);
+
+*/
+    for(var i=0; i<arrLOC.length; i++){
+    console.log('address ', i, arrLOC[i]);
 
     const grabFormat = ((subject, format)=>{
-	var sample = `https://www.loc.gov/`
+	var sample = arrLOC[i];
 	var paraObj = {
 		params: {
 			fo:'json',
-			c:'50',
-			at:item,resources,reproductions
+			//c:'50',
+			//at:item,resources,reproductions
             //?? --- at!=more_like_this
-            sb:date_desc
-            sb:shelf_id
-			api_key: kDP,
+            //sb:date_desc
+            //sb:shelf_id
+			//api_key: kDP,
 		}
 	}
 	return Axios.get(sample,paraObj);
 	});
-*/
+
+
+    var query = grabFormat(null, 'json');
+    query.then(result=>{
+
+				console.log('rrrr', result.data);
+				//console.log(result);
+				var resultFirst=result.data;
+				//relatedItemsLOC(resultFirst);
+				//displayLOC(resultFirst);
+
+	}).catch((error) =>{console.log('error')});
+
+
+    };
+
+    
 	
 }
 
 
+
+
 const getDataFromNYPL=(arrNYPL)=>{
-	console.log('NYPL');
+	//console.log('NYPL');
 	
 }
 
 
 const getDataFromArchive=(arrArchive)=>{
 	console.log('online Archive');
-	
+
+	var archiveID = [];
+    for(var i=0; i<arrArchive.length; i++){
+	archiveID.push(arrArchive[i].substr(arrArchive[i].lastIndexOf('/')+1));
+    }
+    console.log('AAAA', archiveID);
+
+///*
+    //code for getting metadata
+
+	for(var i=0; i<arrArchive.length; i++){
+    //console.log('address ', i, arrArchive[i]);
+
+    const grabFormat = ((subject, format)=>{
+	var sample = 'https://archive.org/metadata/' + archiveID[i];
+	//var sample = 'https://archive.org/services/img/' + archiveID[i]; //automatically determine the appropriate image to represent an item
+	//var sample = 'https://archive.org/download/' + archiveID[i] + '/page/cover_t.jpg'; //coverpage
+
+	console.log('whatIsThis', sample);
+	return Axios.get(sample);
+	});
+
+
+    var query = grabFormat(null, 'json');
+    query.then(result=>{
+
+				console.log('archive', result.data);
+				//console.log(result);
+				var resultFirst=result.data;
+				
+	}).catch((error) =>{console.log('error')});
+
+    };
+//*/
+
+
+/*  
+    //code for retrieving snapshots 
+
+	for(var i=0; i<arrArchive.length; i++){
+    //console.log('address ', i, arrArchive[i]);
+
+    const grabFormat = ((subject, format)=>{
+	var sample = 'https://archive.org/wayback/available?url=' + arrArchive[i];
+
+	console.log('whatIsThis', sample);
+	return Axios.get(sample);
+	});
+
+
+    var query = grabFormat(null, 'json');
+    query.then(result=>{
+
+				console.log('archive', result.data);
+				//console.log(result);
+				var resultFirst=result.data;
+				
+	}).catch((error) =>{console.log('error')});
+
+    };
+*/
+
 }
 
 
@@ -380,7 +494,7 @@ const addCards = (arr) => {
 			cards.id = "cards";
 			cards.style.display = 'flex';
 			cards.style.flexWrap = 'wrap';
-			cards.style.height = '80vh';
+			cards.style.height = '50vh';
 			cards.style.overflow ='auto';
 	}
 
@@ -404,21 +518,7 @@ const addCards = (arr) => {
 	      </ul>
 	    </div>
   </div>`
-/*
-var card =` <div class="card" style="width: 17rem; margin-right: 1rem;margin-top: 2rem;">
-		  <div class="card-header">
-		    ItemType: ${entry.data.data.itemType}
-		  </div>
-	    <div class="card-body">
-	    <a href=${entry.data.data.url} target="_blank"><h5 class="card-title">${entry.data.title}</h5></a>
-	      <ul>
-	      	<li>place:${entry.data.data.place}</li>
-	      	<li>author:${entry.data.data.creators}</li>
-	      	<li>date:${entry.data.data.date}</li>
-	      </ul>
-	    </div>
-  </div>`
-*/
+
 
 		cards.innerHTML += card ;
 	})
@@ -428,7 +528,60 @@ var card =` <div class="card" style="width: 17rem; margin-right: 1rem;margin-top
 }
 
 
-//other ideas:
+const displayLOC = (arrDis) =>{
 
+}
+
+
+const relatedItemsLOC = (arrRelatedItem) =>{
+	var relatedItem = arrRelatedItem.related_items;
+	console.log('related items ', relatedItem);
+
+	var moreLikeThis = arrRelatedItem.more_like_this;
+	console.log('more like this ', moreLikeThis);
+
+
+
+	if (!document.querySelector('#cards')) {
+			var cards = document.createElement('div');
+			cards.id = "cards";
+			cards.style.display = 'flex';
+			cards.style.flexWrap = 'wrap';
+			cards.style.height = '80vh';
+			cards.style.overflow ='auto';
+	}
+
+	relatedItem.forEach(entry=>{
+
+		var card = '';
+
+		var card =` <div class="card" style="width: 7rem; margin-right: 1rem;margin-top: 2rem;">
+		  <div class="card-header">
+		    Item: ${entry.relatedItem.subject}
+		  </div>
+	    <div class="card-body">
+	    <a href=${entry.relatedItem.id} target="_blank"><h5 class="card-title">${entry.relatedItem.title}</h5></a>
+	      <ul>
+	      	<li>place:${entry.relatedItem.location}</li>
+	      	<li>description:${entry.relatedItem.description}</li>
+	      	<li>date:${entry.relatedItem.date}</li>
+	      	<li>language:${entry.relatedItem.language}</li>
+	      </ul>
+	    </div>
+      </div>`
+
+    cards.innerHTML += card ;
+	})
+
+	document.querySelector('.row minor').append(cards);
+
+}
+
+
+
+
+
+
+//other ideas:
 				//aggregate by decade then medium, decade year then author, decade then source
 				//radio buttons to that effect
