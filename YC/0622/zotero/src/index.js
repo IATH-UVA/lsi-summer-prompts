@@ -25,10 +25,8 @@ window.onload=(()=>{
     //getSearchParams();
 
 	var getSample = basicCall('get', params, 80, null);
-	//console.log(getSample);
 
 	var getReturns = basicReturns(getSample);
-	//console.log(getReturns);
 
 	getReturns.then(items =>{
 	    var disAll = items.map(item=>item);
@@ -60,11 +58,6 @@ window.onload=(()=>{
 
 });
 
-
-/* write as many functions down here as desired, to simplify your code and avoid repetition */
-
-//redo the first call with all other promises-------
-//title testing/searching
 
 
 
@@ -243,8 +236,8 @@ const getMoreData = (resultArr) =>{
   };
 
   console.log('see Hathi here', HathiArr);
-  console.log('see LOC here', LOCArr);
-  console.log('see Archive here', ArchiveArr);
+  //console.log('see LOC here', LOCArr);
+  //console.log('see Archive here', ArchiveArr);
 
   getDataFromBHL(BHLArr);
   getDataFromHathitrust(HathiArr);
@@ -274,21 +267,19 @@ const getDataFromHathitrust=(arrHathi)=>{
     //secret key = b98e006776869701ec946a444c2d;
 
     var hathiID = [];
+    var hathiRealID = [];
+
     for(var i=0; i<arrHathi.length; i++){
 	hathiID.push(arrHathi[i].substr(arrHathi[i].lastIndexOf('/')+1));
     }
     console.log('HHHH', hathiID);
 
-///*
     //code for getting metadata
 
 	for(var i=0; i<arrHathi.length; i++){
-    //console.log('address ', i, arrArchive[i]);
 
     const grabFormat = ((subject, format)=>{
-	var sample = 'https://babel.hathitrust.org/cgi/htd/volume/meta/:' + hathiID[i] + '?format=json&v=2';
-	//var sample = 'https://archive.org/services/img/' + archiveID[i]; //automatically determine the appropriate image to represent an item
-	//var sample = 'https://archive.org/download/' + archiveID[i] + '/page/cover_t.jpg'; //coverpage
+	var sample = 'https://catalog.hathitrust.org/api/volumes/full/recordnumber/' + hathiID[i] + '.json';
 
 	console.log('fromHathi', sample);
 	return Axios.get(sample);
@@ -296,19 +287,40 @@ const getDataFromHathitrust=(arrHathi)=>{
 
 
     var query = grabFormat(null, 'json');
-    query.then(result=>{
+    var a = query.then(result=>{
 
 				console.log('hathi', result.data);
-				//console.log(result);
-				var resultFirst=result.data;
+
+				hathiRealID.push(result.data.items[0].htid);
+				//console.log('hahahaha', hathiRealID);
+				return hathiRealID;
 				
 	}).catch((error) =>{console.log('error')});
 
     };
+/*
+    a.then(result=>{
+        var realID = result.map(item => item);
+        console.log('HAHA', realID);
 
-    //*/
+        for(var i=0; i<realID.length; i++){
+        	    const grabFormatAgn = ((subject, format)=>{
+	            var sample = 'https://babel.hathitrust.org/cgi/htd/volume/meta/' + realID[i] + '?format=json&v=2&oauth_consumer_key=7481494549&oauth_nonce=889f5ab0d5fbd86c43df&oauth_signature=LwlLomLrU%2F%2FmkSxyV0HyXbqZjtk%3D&oauth_signature_method=HMAC-SHA1&oauth_timestamp=1530633335&oauth_version=1.0';
+	            console.log('RealIDFromHathi', sample);
+	            return Axios.get(sample);
+	            });
+	    var queryAgn = grabFormatAgn(null, 'json');
+	    queryAgn.then(result=>{
+
+				console.log('finalHathi', result.data);
 	
+	    }).catch((error) =>{console.log('error')});
+
+        }	
+    })
+*/	
 }
+
 
 
 const getDataFromLOC=(arrLOC)=>{
@@ -320,18 +332,9 @@ const getDataFromLOC=(arrLOC)=>{
 	//check the format of the existing urls
 	//get item id from the existing array of url
 	//map through the id information and grab data from api request
-/*
+	//0:"https://www.loc.gov/item/gm71002199/"
+    //1:"https://www.loc.gov/item/74692191/"
 
-//0:"https://www.loc.gov/item/gm71002199/"
-//1:"https://www.loc.gov/item/74692191/"
-    var LocID = [];
-    for(var i=0; i<arrLOC.length; i++){
-	LocID.push(arrLOC[i].substr(25,arrLOC[i].indexOf('/', 26)));
-	//another ways: str.slice(beginIndex[, endIndex]), str.split([separator[, limit]])
-    }
-    console.log(LocID);
-
-*/
     for(var i=0; i<arrLOC.length; i++){
     console.log('address ', i, arrLOC[i]);
 
@@ -340,12 +343,6 @@ const getDataFromLOC=(arrLOC)=>{
 	var paraObj = {
 		params: {
 			fo:'json',
-			//c:'50',
-			//at:item,resources,reproductions
-            //?? --- at!=more_like_this
-            //sb:date_desc
-            //sb:shelf_id
-			//api_key: kDP,
 		}
 	}
 	return Axios.get(sample,paraObj);
@@ -355,8 +352,7 @@ const getDataFromLOC=(arrLOC)=>{
     var query = grabFormat(null, 'json');
     query.then(result=>{
 
-				console.log('rrrr', result.data);
-				//console.log(result);
+				//console.log('rrrr', result.data);
 				var resultFirst=result.data;
 				//relatedItemsLOC(resultFirst);
 				//displayLOC(resultFirst);
@@ -386,20 +382,18 @@ const getDataFromArchive=(arrArchive)=>{
     for(var i=0; i<arrArchive.length; i++){
 	archiveID.push(arrArchive[i].substr(arrArchive[i].lastIndexOf('/')+1));
     }
-    console.log('AAAA', archiveID);
+    //console.log('AAAA', archiveID);
 
-///*
     //code for getting metadata
-
 	for(var i=0; i<arrArchive.length; i++){
     //console.log('address ', i, arrArchive[i]);
 
     const grabFormat = ((subject, format)=>{
 	var sample = 'https://archive.org/metadata/' + archiveID[i];
-	//var sample = 'https://archive.org/services/img/' + archiveID[i]; //automatically determine the appropriate image to represent an item
-	//var sample = 'https://archive.org/download/' + archiveID[i] + '/page/cover_t.jpg'; //coverpage
+	//var sample = 'https://archive.org/services/img/' + archiveID[i];    //automatically determine the appropriate image to represent an item
+	//var sample = 'https://archive.org/download/' + archiveID[i] + '/page/cover_t.jpg';    //coverpage
 
-	console.log('whatIsThis', sample);
+	//console.log('whatIsThis', sample);
 	return Axios.get(sample);
 	});
 
@@ -407,14 +401,12 @@ const getDataFromArchive=(arrArchive)=>{
     var query = grabFormat(null, 'json');
     query.then(result=>{
 
-				console.log('archive', result.data);
-				//console.log(result);
+				//console.log('archive', result.data);
 				var resultFirst=result.data;
 				
 	}).catch((error) =>{console.log('error')});
 
     };
-//*/
 
 
 /*  
@@ -500,8 +492,6 @@ const addCards = (arr) => {
 
 	arr.forEach(entry=>{
 
-		//4) add the html with inserted js to create the cards here
-
 		var card = '';
 
 		var card =` <div class="card" style="width: 17rem; margin-right: 1rem;margin-top: 2rem;">
@@ -549,6 +539,7 @@ const relatedItemsLOC = (arrRelatedItem) =>{
 			cards.style.flexWrap = 'wrap';
 			cards.style.height = '80vh';
 			cards.style.overflow ='auto';
+
 	}
 
 	relatedItem.forEach(entry=>{
