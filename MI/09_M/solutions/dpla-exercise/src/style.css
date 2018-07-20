@@ -19,8 +19,13 @@ canvas {
 	height: 10vh;
 }
 
+.med {
+	height: 15vh;
+}
+
 .resList {
 	height: 50vh;
 	overflow-y: auto;
 }
+
 

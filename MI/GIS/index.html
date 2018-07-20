@@ -1,0 +1,192 @@
+<html>
+<head>
+  <meta charset=utf-8 />
+  <title>Esri Leaflet Demo</title>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+    <!-- Load Leaflet from CDN -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css"
+    integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+    crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"
+    integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
+    crossorigin=""></script>
+
+
+    <!-- Load Esri Leaflet from CDN -->
+    <script src="https://unpkg.com/esri-leaflet@2.2.1/dist/esri-leaflet.js"
+    integrity="sha512-6BBVttv13OVrrUSoGmy9/aIVHateyIEGFaQxqnzCgXT9LNCAQ1Cxxj43R6Eq0ynydS7a7bLLfmEWwXFiO6lW2g=="
+    crossorigin=""></script>
+
+
+  <style>
+    body { margin:0; padding:0; }
+    #mapA { position: absolute; top:0; bottom:0; right:0; left:0; }
+    .info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
+
+    #mapB { position: absolute; top:500; bottom:0; right:1250; left:0;}
+    .info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
+   
+/*    #mapB { position: absolute; top:0; bottom:0; right:0; left:0;}*/
+  </style>
+</head>
+<body>
+
+<style>
+/*	#borderLayers-wrapper {
+		position: absolute;
+		left: 10px;
+		bottom: 10px;
+		z-index: 400;
+		background:white;
+		padding:10px;
+	}
+	#bordersLayers {
+		margin-bottom: 5px;
+	}*/
+	#info-pane {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		z-index: 400;
+		padding: 6px 8px;
+		background: white;
+		border-radius: 5px;
+
+	}
+</style>
+
+<div id="mapA"></div>
+
+<!-- working hover
+	<div id = "info-pane" class = "leaflet-bar"> Hover to Inspect</div> -->
+
+<script type = text/javascript>
+  var mapA = L.map("mapA").setView([51.549, 14.716], 15);
+
+  L.esri.basemapLayer("Topographic").addTo(mapA);
+
+  var contours = L.esri.featureLayer({
+  	url: "https://services2.arcgis.com/8k2PygHqghVevhzy/arcgis/rest/services/MuskauContour02/FeatureServer/0?token=7F5lMCN8_pcJvhHkOtzOyYtt3w1R_zpM-2578gkYulzy7C3a71HK5fNpo5L-uC3t0w9wVfM0LJgVseKAh8MukDyCBTdbFnTknitYKrpbCLwZJyNmCeBDOIuw4KCOHRg5HqQJjCDk4GuorB2tAm0ZRyMxr5DTHigEA0Wt8shHTtnvVOMf72laxCHknQzZismBtGFTQqsZJgdAm9N84lwhN8iCs432LoqCZ3Y2jdOe6Kq2afoZeTkk5dAI9nC7WsspADddYp-xvZlzskU9Jbsp0A..", 
+  	style: function(feature){
+  		
+  		var c,o = 0.75;
+  		
+  		if (feature.properties.Elevation > '100.00' && feature.properties.Elevation < '105.00') {
+	  		c = '#000000';
+	  	}else if (feature.properties.Elevation >= '105.00' && feature.properties.Elevation < '110.00'){
+	  		c = '#1a0000';
+	  	}else if (feature.properties.Elevation >= '110.00' && feature.properties.Elevation < '115.00'){
+	  		c = '#330000';
+	  	}else if (feature.properties.Elevation >= '115.00' && feature.properties.Elevation < '120.00') {
+	  		c = '#4d0000';
+	  	}else if (feature.properties.Elevation >= '120.00' && feature.properties.Elevation < '125.00'){
+	  		c = '#660000';
+	  	}else if (feature.properties.Elevation >= '125.00' &&  feature.properties.Elevation < '130.00'){
+	  		c = '#800000';
+	  	}else if (feature.properties.Elevation >= '130.00' && feature.properties.Elevation < '135.00'){
+	  		c = '#990000';
+	  	}else if (feature.properties.Elevation >= '135.00' && feature.properties.Elevation < '140.00'){
+	  		c = '#b30000';
+	  	}else if (feature.properties.Elevation >= '140.00' && feature.properties.Elevation < '145.00'){
+	  		c = '#cc0000';
+	  	}else if (feature.properties.Elevation >= '145.00' && feature.properties.Elevation < '150.00'){
+	  		c = '#e60000';
+	  	}else if (feature.properties.Elevation >= '150.00' && feature.properties.Elevation < '155.00'){
+	  		c = '#ff0000';
+	  	}else if (feature.properties.Elevation >= '155.00' && feature.properties.Elevation < '160.00'){
+	  		c = '#ff1a1a';
+	  	}else if (feature.properties.Elevation >= '160.00'){
+	  		c = '#ff3333';
+	  	}else{
+	  		c = '#000000';
+	  	}
+	  	return {color: c, opacity: o, weight: 5};		
+  	}
+  }).addTo(mapA);
+
+  //working hover
+
+/*  contours.on('mouseout', function(e){
+  	document.getElementById('info-pane').innnerHTML = 'Hover to Inspect';
+  })
+
+  contours.on('mouseover', function(e){
+  	document.getElementById('info-pane').innerHTML = e.layer.feature.properties.Elevation + ' m' ;
+  });*/
+
+
+//in progress hover
+
+var info = L.control();
+
+info.onAdd = function (map) {
+	this._div = L.DomUtil.create('div', 'info');
+	this.update();
+	return this._div;
+};
+
+info.update = function (props) {
+	this._div.innerHTML = '<h4>Park Muskau 2.5 m Contour Map </h4>' + (props ? '</b>' + props.Elevation + ' m' +'</b>' : 'Hover over a line' );
+};
+
+info.addTo(mapA);
+
+  </script>
+
+  <div id="mapB"></div>
+
+  <script>
+  	var mapB = L.map("mapB").setView([51.549,14.716], 2.5);
+
+  	L.esri.basemapLayer("Topographic").addTo(mapB);
+
+  	var url1820 = L.esri.featureLayer({
+  		url: "https://services2.arcgis.com/8k2PygHqghVevhzy/ArcGIS/rest/services/GermanPolishBorders/FeatureServer/0?token=cbGJceMr2vw-IHvI-8CbsTddqRoNNVDZ6BzUVCLseBLYCk_zG5ehhR7jMV66B0yNwoHowQFPj36CKe-AqA__W3t40JiVZKVjz291s9WawrF5KsDFrJkR59xlddzdim85pGPZoEmO_-pwxLJiVnkNthJ0WxAx09wg5tWltQmZa_qQTh5-sCJSYtdA7oq41bYZsGa33Km3txAzqYFrwLKJHF6ACyyF7VoXeiq-WqN-r9IvcV_9Y3sqkv8dagwJY-EpbNofzfdJWXOUHAINdU9FVQ.."
+  	});
+
+  	var url1850 = L.esri.featureLayer({
+  		url: "https://services2.arcgis.com/8k2PygHqghVevhzy/ArcGIS/rest/services/GermanPolishBorders/FeatureServer/1?token=cbGJceMr2vw-IHvI-8CbsTddqRoNNVDZ6BzUVCLseBLYCk_zG5ehhR7jMV66B0yNwoHowQFPj36CKe-AqA__W3t40JiVZKVjz291s9WawrF5KsDFrJkR59xlddzdim85pGPZoEmO_-pwxLJiVnkNthJ0WxAx09wg5tWltQmZa_qQTh5-sCJSYtdA7oq41bYZsGa33Km3txAzqYFrwLKJHF6ACyyF7VoXeiq-WqN-r9IvcV_9Y3sqkv8dagwJY-EpbNofzfdJWXOUHAINdU9FVQ.."
+  	});
+
+  	var url1867 = L.esri.featureLayer({
+  		url: "https://services2.arcgis.com/8k2PygHqghVevhzy/ArcGIS/rest/services/GermanPolishBorders/FeatureServer/3?token=cbGJceMr2vw-IHvI-8CbsTddqRoNNVDZ6BzUVCLseBLYCk_zG5ehhR7jMV66B0yNwoHowQFPj36CKe-AqA__W3t40JiVZKVjz291s9WawrF5KsDFrJkR59xlddzdim85pGPZoEmO_-pwxLJiVnkNthJ0WxAx09wg5tWltQmZa_qQTh5-sCJSYtdA7oq41bYZsGa33Km3txAzqYFrwLKJHF6ACyyF7VoXeiq-WqN-r9IvcV_9Y3sqkv8dagwJY-EpbNofzfdJWXOUHAINdU9FVQ.."
+  	});
+
+  	var url1890 = L.esri.featureLayer({
+  		url:"https://services2.arcgis.com/8k2PygHqghVevhzy/ArcGIS/rest/services/GermanPolishBorders/FeatureServer/6?token=cbGJceMr2vw-IHvI-8CbsTddqRoNNVDZ6BzUVCLseBLYCk_zG5ehhR7jMV66B0yNwoHowQFPj36CKe-AqA__W3t40JiVZKVjz291s9WawrF5KsDFrJkR59xlddzdim85pGPZoEmO_-pwxLJiVnkNthJ0WxAx09wg5tWltQmZa_qQTh5-sCJSYtdA7oq41bYZsGa33Km3txAzqYFrwLKJHF6ACyyF7VoXeiq-WqN-r9IvcV_9Y3sqkv8dagwJY-EpbNofzfdJWXOUHAINdU9FVQ.."
+  	});
+
+  	var url2015 = L.esri.featureLayer({
+  		url:"https://services2.arcgis.com/8k2PygHqghVevhzy/ArcGIS/rest/services/GermanPolishBorders/FeatureServer/7?token=cbGJceMr2vw-IHvI-8CbsTddqRoNNVDZ6BzUVCLseBLYCk_zG5ehhR7jMV66B0yNwoHowQFPj36CKe-AqA__W3t40JiVZKVjz291s9WawrF5KsDFrJkR59xlddzdim85pGPZoEmO_-pwxLJiVnkNthJ0WxAx09wg5tWltQmZa_qQTh5-sCJSYtdA7oq41bYZsGa33Km3txAzqYFrwLKJHF6ACyyF7VoXeiq-WqN-r9IvcV_9Y3sqkv8dagwJY-EpbNofzfdJWXOUHAINdU9FVQ.."
+  	});
+
+  	var overlays = {
+  		"1820" : url1820,
+  		"1850" : url1850,
+  		"1867" : url1867,
+  		"1890" : url1890,
+  		"2015" : url2015
+  	};
+
+  	
+
+  	var info = L.control();
+
+	info.onAdd = function (map) {
+		this._div = L.DomUtil.create('div', 'info');
+		this.update();
+		return this._div;
+	};
+
+	info.update = function (props) {
+		this._div.innerHTML = '<h4>German Borders Over Time</h4>';
+	};
+
+	info.addTo(mapB);
+	L.control.layers(overlays).addTo(mapB);
+
+  </script>
+
+</body>
+</html>
